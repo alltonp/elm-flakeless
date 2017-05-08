@@ -198,7 +198,7 @@ update requestsPort msg model =
 
                         --TODO: this might be the wrong place to do this now ... also in RNS
                         updatedFinished =
-                            if List.isEmpty response.failures then
+                            if (List.isEmpty response.failures) || (not response.successful) then
                                 Nothing
                             else
                                 Just response.context.updated

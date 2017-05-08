@@ -12,6 +12,8 @@ type alias Flags =
 
 
 -- TODO: ultimately config isn't needed, they become browserIdToScriptId (mainly)
+--TODO: should model states as better types, NotStarted, Running, Finished etc (both steps and scripts)
+--TOOD: only send id's and payload to the pjs
 
 
 type alias Model =

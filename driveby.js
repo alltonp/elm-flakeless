@@ -50,6 +50,23 @@ function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
       }, 1); //TODO: make this a config option
 };
 
+function waitFor2(page, context, testFx, onReady, onFail, timeOutMillis) {
+  var condition = testFx();
+  if (!condition) { respond(page, context, [ onFail() ], false); }
+  else { respond(page, context, [], true); }
+
+//  var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3000, //TODO: make this a config option
+//      start = new Date().getTime(),
+//      condition = false,
+//      interval = setInterval(function() {
+//        if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) { condition = testFx(); }
+//        else {
+//          if (!condition) { clearInterval(interval); respond(page, context, [ onFail() ], false); }
+//          else { onReady(); clearInterval(interval); respond(page, context, [], true); }
+//        }
+//      }, 1); //TODO: make this a config option
+};
+
 //TODO: make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
 phantom.injectJs("tests.js") ? "... done injecting tests.js!" : "... failed injecting tests.js!";
 
