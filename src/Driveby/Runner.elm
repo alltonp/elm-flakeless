@@ -122,6 +122,10 @@ update requestsPort msg model =
         MainLoop2 date ->
                     let
                         d = Debug.log "MainLoop2" (toString date)
+                        --logic
+                        --look at model ...
+                        --if fewer scripts running than numberOfBrowers -> start new Script
+                        --else if
                         --TODO: I need fleshing out
                         --BUG: test fails, but then carries on add passes, lol because next step will be run, it probably needs its
                         --             finish flag to be set
@@ -155,7 +159,7 @@ update requestsPort msg model =
 
                                         --TODO: keep this in on the elm side and have an debugTrace flag
                                         --                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
-                                        a = Debug.log "RNS" (toString step)
+--                                        a = Debug.log "RNS" (toString step)
                                     in
                                         ( model, requestsPort (Request context step) )
 
@@ -333,4 +337,5 @@ runAllScripts : Cmd Msg
 runAllScripts =
     Task.perform
         RunAllScripts
+--        MainLoop2
         Date.now

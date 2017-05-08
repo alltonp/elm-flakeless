@@ -16,10 +16,14 @@ type alias Flags =
 --TOOD: only send id's and payload to the pjs
 
 
+type alias State =
+    {}
+
 type alias Model =
     { flags : Flags
     , browserIdToScriptId : Dict Int Int
     , scriptIdToExecutableScript : Dict Int ExecutableScript
+--    , state : State
     }
 
 --TODO: may need ExecutableStep too ...
@@ -36,7 +40,7 @@ type alias ExecutableScript =
 
 
 --TODO: fix all this naming too
-
+--TODO: feels like should be able to go to MainLoop and Process Response really
 
 type Msg
     = RunAllScripts Date
