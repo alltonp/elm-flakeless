@@ -6,7 +6,7 @@ var webpage = require('webpage')
 //TODO: or loading it from a file (and creating if doesnot exist) driveby.json
 var numberOfBrowsers = 4;
 var nextPort = 9000;
-var surpressPageErrors = false;
+var surpressPageErrors = true;
 var screenshotAllSteps = false;
 var screenshotFailures = true;
 
@@ -62,44 +62,10 @@ app.ports.requests.subscribe(function(request) {
   var context = request.context
   var page = pages[context.browserId]
 
-  //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
-  var clickScript = "function click(page, context, selector) { \
-                         waitFor(page, context, function() { return isUniqueInteractable(page, selector); } \
-                           , function() { \
-                               page.evaluate(function(theSelector) { document.querySelector(theSelector).click(); }, selector); \
-                           } \
-                           , function() { return describeFailure(page, selector); } \
-                         ); \
-                       };";
-
-    eval(clickScript);
-
-   var enterScript = "function enter(page, context, selector, value) { \
-                         waitFor(page, context, function() { return isUniqueInteractable(page, selector); } \
-                           , function() { \
-                               page.evaluate(function(theSelector, theValue) { document.querySelector(theSelector).focus(); }, selector, value); \
-                               page.sendEvent('keypress', value); \
-                           } \
-                           , function() { return describeFailure(page, selector); } \
-                         ); \
-                       }";
-
-   eval(enterScript);
-
-   var gotoScript = "function goto(page, context, url) { \
-                       page.open(url, function(status) { \
-                         if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
-                         else { respond(page, context, []) } \
-                       }); \
-                     }"
-
-   eval(gotoScript);
-
-
-  if (name == "click") { eval('click(page, context, command.args[0]);'); }
-  else if (name == "enter") { eval('enter(page, context, command.args[0], command.args[1]);'); }
-  else if (name == "goto") { eval('goto(page, context, command.args[0]);'); }
-  else if (name == "gotoLocal") { eval('goto(page, context, "http://localhost:" + context.localPort + command.args[0]);') }
+  if (name == "click") { click(page, context, command.args[0]); }
+  else if (name == "enter") { enter(page, context, command.args[0], command.args[1]); }
+  else if (name == "goto") { goto(page, context, command.args[0]); }
+  else if (name == "gotoLocal") { goto(page, context, "http://localhost:" + context.localPort + command.args[0]); }
   else if (name == "assert") { assert(page, context, command.args[0], command.args[1], command.args[2], command.args[3]); }
   else if (name == "close") { close(page, context); }
   else if (name == "serve") { serve(context, command.args[0], context.localPort); }
@@ -125,10 +91,33 @@ function respond(page, context, failures) {
   app.ports.responses.send(response);
 }
 
-//TIP: this is once per script, rename me to reflect that
 function init(context) {
   context.localPort = nextPort; nextPort = nextPort + 1;
   respond(null, context, []);
+}
+
+function goto(page, context, url) {
+  page.open(url, function(status) {
+    if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
+    else { respond(page, context, []) }
+  });
+}
+
+//TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
+function click(page, context, selector) {
+  waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
+    , function() { page.evaluate(function(theSelector) { document.querySelector(theSelector).click(); }, selector); }
+    , function() { return describeFailure(page, selector); }
+  );
+}
+
+function enter(page, context, selector, value) {
+  waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
+    , function() { //action
+        page.evaluate(function(theSelector, theValue) { document.querySelector(theSelector).focus(); }, selector, value);
+        page.sendEvent('keypress', value); }
+    , function() { return describeFailure(page, selector); }
+  );
 }
 
 function assert(page, context, description, selector, condition, expected) {
