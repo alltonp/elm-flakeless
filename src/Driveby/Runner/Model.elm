@@ -38,7 +38,7 @@ type alias ExecutableScript =
 
 type Msg
     = RunAllScripts Date
-    | RunNextScript Int String {- Date -}
+    | RunNextScript Int String Date {- Date -}
     | RunNextStep Context
     | Process Response
     | MainLoop Context

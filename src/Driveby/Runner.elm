@@ -70,14 +70,14 @@ update requestsPort msg model =
                 cmds =
                     List.repeat model.flags.numberOfBrowsers 1
                         |> List.indexedMap (,)
-                        |> List.map (\( i, r ) -> asFx (RunNextScript i ""))
+                        |> List.map (\( i, r ) -> asFx (RunNextScript i "" startDate))
             in
                 ( model, Cmd.batch cmds )
 
         --This isnt really a good name, the intention is to start a script on browserId
         --but actually it runs the next available script on this browserId if there is one
         -- fix the implementation ...
-        RunNextScript browserId theDate ->
+        RunNextScript browserId theDate currentDate ->
             case nextUnstartedScript model of
                 Just executableScript ->
                     let
@@ -231,7 +231,7 @@ update requestsPort msg model =
                 --        d3 = Debug.log "Driveby scriptsThatNeedToFinish: " ((toString (List.length scriptsThatNeedToFinish)))
                 cmd =
                     if not (List.isEmpty (scriptsThatNeedToStart model)) then
-                        asFx (RunNextScript context.browserId context.updated)
+                        asFx (RunNextScript context.browserId context.updated date)
                     else if not (List.isEmpty (scriptsThatNeedToFinish model)) then
                         Cmd.none
                         --TODO: we should be updating the context.stepId whenever we send it through requestsPort or (MainLopp)
