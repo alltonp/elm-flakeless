@@ -93,7 +93,7 @@ update requestsPort msg model =
                                         model.scriptIdToExecutableScript
                             }
                     in
-                        ( updatedModel, asFx (RunNextStep (Context -1 browserId executableScript.id 0 theDate)) )
+                        ( updatedModel, asFx (RunNextStep (Context -1 browserId executableScript.id 0 theDate) currentDate) )
 
                 Nothing ->
                     ( model, Cmd.none )
@@ -110,12 +110,16 @@ update requestsPort msg model =
                 --if no more steps then RunNextScript
                 --if no more scripts then AllDone
                 nextCmd =
-                    asFx (RunNextStep { context | stepId = context.stepId + 1 })
+                    Task.perform
+                    (RunNextStep { context | stepId = context.stepId + 1 })
+                    Date.now
+
+--                    asFx (RunNextStep { context | stepId = context.stepId + 1 })
             in
                 ( model, nextCmd )
 
         --TODO: pretty sure this doesn't do just what it says on the tin ...
-        RunNextStep context ->
+        RunNextStep context currentDate ->
             case currentScript context model of
                 Just executableScript ->
                     let
