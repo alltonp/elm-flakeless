@@ -98,6 +98,7 @@ update requestsPort msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
+        --TODO: this should be called repeatedly using the Time.every and work out it's stuff ...
         MainLoop context ->
             let
                 --        d = Debug.log "MainLoop" (toString context)
@@ -127,10 +128,13 @@ update requestsPort msg model =
                             case nextStepToRun executableScript of
                                 Just step ->
                                     let
+                                        started = case step.started of
+                                            Just x -> Just x
+                                            Nothing -> Just (toString currentDate)
+
                                         --TODO: keep this in on the elm side and have an debugTrace flag
                                         --                        d = Debug.log ("Driveby " ++ ( (toString context.localPort) ++ " " ++ (toString context.browserId) ++ " " ++ (toString step.id) ++ ": " ++ step.command.name ++ " " ++ (toString step.command.args) )) ""
-                                        a =
-                                            ""
+                                        a = Debug.log "RNS" (toString step)
                                     in
                                         ( model, requestsPort (Request context step) )
 
