@@ -45,7 +45,7 @@ buildScriptIdToExecutableScript scripts =
                     steps =
                         script.commands
                             |> List.indexedMap (,)
-                            |> List.map (\( i, command ) -> Step i command False)
+                            |> List.map (\( i, command ) -> Step i command False Nothing)
                 in
                     ( i, ExecutableScript i script.name steps Nothing Nothing [] )
             )
@@ -171,7 +171,7 @@ update requestsPort msg model =
                             List.map
                                 (\s ->
                                     if s.id == response.context.stepId then
-                                        Step s.id s.command True
+                                        Step s.id s.command (response.successful) s.started
                                     else
                                         s
                                 )
@@ -227,7 +227,7 @@ update requestsPort msg model =
                         --TODO: we shouldnt have to hardcode this 999 either ..
                         --TODO: should be an AllDone me thinks ...
                     else
-                        (requestsPort (Request context (Step 999 close False)))
+                        (requestsPort (Request context (Step 999 close False Nothing)))
             in
                 ( model, cmd )
 

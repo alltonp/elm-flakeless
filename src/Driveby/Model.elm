@@ -1,10 +1,13 @@
 module Driveby.Model exposing (..)
 
+import Date exposing (..)
+
 
 type alias Step =
     { id : Int
     , command : Command
     , executed : Bool
+    , started : Maybe String
     }
 
 
