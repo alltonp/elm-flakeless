@@ -20,6 +20,7 @@ type alias Model =
     , scriptIdToExecutableScript : Dict Int ExecutableScript
     }
 
+--TODO: may need ExecutableStep too ...
 
 type alias ExecutableScript =
     { id : Int
@@ -41,7 +42,7 @@ type Msg
     | RunNextStep Context
     | Process Response
     | MainLoop Context
-    | ScriptFinished String Context
+    | ScriptFinished String Context Date
 
 
 

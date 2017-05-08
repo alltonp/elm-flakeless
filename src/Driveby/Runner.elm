@@ -144,13 +144,24 @@ update requestsPort msg model =
                                         --TODO: this should be in MainLoop
                                         cmd =
                                             if List.isEmpty executableScript.failures then
-                                                asFx (ScriptFinished ("- " ++ executableScript.name) context)
+                                                Task.perform
+                                                    (ScriptFinished ("- " ++ executableScript.name) context)
+                                                    Date.now
+
+--                                                asFx (ScriptFinished ("- " ++ executableScript.name) context)
                                             else
-                                                asFx
+                                                Task.perform
                                                     (ScriptFinished
-                                                        ("☒ " ++ executableScript.name ++ " " ++ (toString executableScript.failures))
-                                                        context
-                                                    )
+                                                                                                             ("☒ " ++ executableScript.name ++ " " ++ (toString executableScript.failures))
+                                                                                                             context)
+                                                    Date.now
+
+
+--                                                asFx
+--                                                    (ScriptFinished
+--                                                        ("☒ " ++ executableScript.name ++ " " ++ (toString executableScript.failures))
+--                                                        context
+--                                                    )
                                     in
                                         ( { model | scriptIdToExecutableScript = updatedScriptIdToExecutableScript }, cmd )
                     in
@@ -209,7 +220,7 @@ update requestsPort msg model =
         --TODO: do we need ScriptFailed, ScriptSucceeded?
         --TODO: currently this isnt doing much for us, logging and closing at end ...
         --TODO: the useful thing it could be doing is marking the script finished! (and removing from the browserId's)
-        ScriptFinished message context ->
+        ScriptFinished message context date ->
             let
                 --TODO: this renders strangely, lets do in js instead ...
                 d =
