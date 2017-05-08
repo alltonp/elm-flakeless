@@ -42,6 +42,7 @@ type alias Request =
 type alias Response =
     { context : Context
     , failures : List String
+    , successful : Bool
     }
 
 

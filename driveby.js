@@ -78,11 +78,13 @@ app.ports.requests.subscribe(function(request) {
 //TODO: rename to notifyElm or something ...
 //TODO: make screenshot be a command and issue it from elm
 //TODO: give it an id and attempt to highlight it in the screenshot
+//TODO: can we send Date across a port? maybe we dont even need to ...
+//TODO: this looks like it needs a success flag or something, to determine if retry is required
 function respond(page, context, failures) {
   var y = Date.now()
   var x = y.toString()
 //  console.log(x)
-  var response = { context:context, failures:failures, updated:x }
+  var response = { context:context, failures:failures, updated:x, successful:true }
   //TODO: we could continue to serve locally on context.localPort, it might be interesting for debugging test failures ...
   //TODO: just need a stayOpenOnFailure
   var screenshot = page != null && (screenshotAllSteps || (screenshotFailures && failures.length > 0) )
@@ -96,6 +98,7 @@ function init(context) {
   respond(null, context, []);
 }
 
+//become just the action bit
 function goto(page, context, url) {
   page.open(url, function(status) {
     if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
@@ -103,6 +106,7 @@ function goto(page, context, url) {
   });
 }
 
+//become just the action bit
 //TIP: http://stackoverflow.com/questions/15739263/phantomjs-click-an-element
 function click(page, context, selector) {
   waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
@@ -111,6 +115,7 @@ function click(page, context, selector) {
   );
 }
 
+//become just the action bit
 function enter(page, context, selector, value) {
   waitFor(page, context, function() { return isUniqueInteractable(page, selector); }
     , function() { //action
@@ -120,6 +125,7 @@ function enter(page, context, selector, value) {
   );
 }
 
+//become just the action bit
 function assert(page, context, description, selector, condition, expected) {
   if (condition == "textContains") { return assertCondition(page, context, selector, expected, description,
     function(e, theExpected) { return e.length == 1 && e[0].textContent.indexOf(theExpected) >= 0; });
@@ -145,6 +151,7 @@ function assertCondition(page, context, selector, expected, description, conditi
   );
 }
 
+//still needed
 function isUniqueInteractable(page, selector) {
   return page.evaluate(function(theSelector) { //TIP: http://stackoverflow.com/questions/19669786/check-if-element-is-visible-in-dom
     var e = document.querySelectorAll(theSelector)
@@ -152,6 +159,7 @@ function isUniqueInteractable(page, selector) {
   }, selector);
 }
 
+//still needed
 function describeFailure(page, selector) {
   return page.evaluate(function(theSelector) {
     return "expected 1 element for " + theSelector + " found " + document.querySelectorAll(theSelector).length;
