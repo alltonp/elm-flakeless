@@ -44,8 +44,8 @@ function waitFor(page, context, testFx, onReady, onFail, timeOutMillis) {
       interval = setInterval(function() {
         if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) { condition = testFx(); }
         else {
-          if (!condition) { clearInterval(interval); respond(page, context, [ onFail() ]); }
-          else { onReady(); clearInterval(interval); respond(page, context, []); }
+          if (!condition) { clearInterval(interval); respond(page, context, [ onFail() ], false); }
+          else { onReady(); clearInterval(interval); respond(page, context, [], true); }
         }
       }, 1); //TODO: make this a config option
 };
@@ -71,7 +71,7 @@ app.ports.requests.subscribe(function(request) {
   else if (name == "serve") { serve(context, command.args[0], context.localPort); }
   else if (name == "stub") { stub(context, command.args[0], command.args[1], context.localPort); }
   else if (name == "init") { init(context); }
-  else { respond(page, context, ["don't know how to process request: " + JSON.stringify(request) ]); }
+  else { respond(page, context, ["don't know how to process request: " + JSON.stringify(request) ], false); }
 });
 
 //TODO: add start time, to capture duration ...
@@ -80,11 +80,11 @@ app.ports.requests.subscribe(function(request) {
 //TODO: give it an id and attempt to highlight it in the screenshot
 //TODO: can we send Date across a port? maybe we dont even need to ...
 //TODO: this looks like it needs a success flag or something, to determine if retry is required
-function respond(page, context, failures) {
+function respond(page, context, failures, result) {
   var y = Date.now()
   var x = y.toString()
 //  console.log(x)
-  var response = { context:context, failures:failures, updated:x, successful:true }
+  var response = { context:context, failures:failures, updated:x, successful:result }
   //TODO: we could continue to serve locally on context.localPort, it might be interesting for debugging test failures ...
   //TODO: just need a stayOpenOnFailure
   var screenshot = page != null && (screenshotAllSteps || (screenshotFailures && failures.length > 0) )
@@ -95,14 +95,14 @@ function respond(page, context, failures) {
 
 function init(context) {
   context.localPort = nextPort; nextPort = nextPort + 1;
-  respond(null, context, []);
+  respond(null, context, [], true);
 }
 
 //become just the action bit
 function goto(page, context, url) {
   page.open(url, function(status) {
-    if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
-    else { respond(page, context, []) }
+    if (status !== 'success') { respond(page, context, [status + ' for ' + url], false) }
+    else { respond(page, context, [], true) }
   });
 }
 
@@ -167,7 +167,7 @@ function describeFailure(page, selector) {
 }
 
 function close(page, context) {
-  respond(page, context, []);
+  respond(page, context, [], true);
   page.close();
   //TODO: pull out a separate exit
   console.log("Done " + (new Date().getTime() - started) + "ms.");
@@ -176,7 +176,7 @@ function close(page, context) {
 
 function stub(context, path, content, port) {
   stubs[(port + ":" + path)] = content;
-  respond(null, context, []);
+  respond(null, context, [], true);
 }
 
 //TODO: content-type c/should probably be passed in for stubs (or based on extension)
@@ -197,5 +197,5 @@ function serve(context, path, port) {
   });
 
   if (!service) { console.log('Error: Could not create web server listening on port ' + port); phantom.exit(); }
-  respond(null, context, [])
+  respond(null, context, [], true)
 }
