@@ -44,6 +44,7 @@ type Msg
     | RunNextStep Context Date
     | Process Response
     | MainLoop Context
+    | MainLoop2 Date
     | ScriptFinished String Context Date
 
 

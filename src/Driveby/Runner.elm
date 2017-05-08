@@ -119,6 +119,27 @@ update requestsPort msg model =
             in
                 ( model, nextCmd )
 
+        MainLoop2 date ->
+                    let
+                        d = Debug.log "MainLoop2" (toString date)
+                        --TODO: I need fleshing out
+                        --BUG: test fails, but then carries on add passes, lol because next step will be run, it probably needs its
+                        --             finish flag to be set
+                        --      TODO: maybe Process is MainLoop actually ...
+                        --if failed then Exit this test
+                        --if more steps then RunNextStep
+                        --if no more steps then RunNextScript
+                        --if no more scripts then AllDone
+                        nextCmd =
+                            Task.perform
+                            (MainLoop2)
+                            Date.now
+
+        --                    asFx (RunNextStep { context | stepId = context.stepId + 1 })
+                    in
+                        ( model, nextCmd )
+
+
         --TODO: pretty sure this doesn't do just what it says on the tin ...
         RunNextStep context currentDate ->
             case currentScript context model of
