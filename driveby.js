@@ -7,7 +7,7 @@ var webpage = require('webpage')
 var numberOfBrowsers = 4;
 var nextPort = 9000;
 var surpressPageErrors = true;
-var screenshotAllSteps = false;
+var screenshotAllSteps = true;
 var screenshotFailures = true;
 
 var started = new Date().getTime();
