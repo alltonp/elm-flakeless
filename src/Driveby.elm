@@ -65,6 +65,10 @@ suite name scripts =
     Suite name scripts
 
 
+
+--TIP: I think this should be Step not Command
+
+
 {-| create Script from supplied Commands
 -}
 script : String -> List Command -> Script

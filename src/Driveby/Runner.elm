@@ -23,7 +23,7 @@ run suite requestsPort responsesPort =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( Model flags Fifo.empty, go )
+    ( Model flags (Fifo.fromList [ ICommand "console.log('hi')", ICommand "console.log('hi')" ]), go )
 
 
 go : Cmd Msg
@@ -41,6 +41,13 @@ subscriptions responsesPort model =
 update : (Request -> Cmd Msg) -> Msg -> Model -> ( Model, Cmd Msg )
 update requestsPort msg model =
     case msg of
+        Go x ->
+            let
+                ( maybeCommand, queue_ ) =
+                    Fifo.remove model.queue
+            in
+            ( { model | queue = queue_ }, Cmd.none )
+
         _ ->
             ( model, Cmd.none )
 

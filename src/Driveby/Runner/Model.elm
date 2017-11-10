@@ -13,11 +13,11 @@ type alias Flags =
 
 type alias Model =
     { flags : Flags
-    , queue : Fifo
+    , queue : Fifo ICommand
     }
 
 
-type alias Command =
+type alias ICommand =
     { js : String
     }
 
