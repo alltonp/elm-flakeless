@@ -28,9 +28,7 @@ init flags =
 
 go : Cmd Msg
 go =
-    Task.perform
-        Go
-        Date.now
+    Task.perform Go Date.now
 
 
 subscriptions : ((Response -> Msg) -> Sub Msg) -> Model -> Sub Msg
@@ -45,8 +43,18 @@ update requestsPort msg model =
             let
                 ( maybeCommand, queue_ ) =
                     Fifo.remove model.queue
+
+                cmd =
+                    case maybeCommand of
+                        Just c ->
+                            requestsPort (Request c.js)
+
+                        Nothing ->
+                            Cmd.none
+
+                --maybe later, sleep for X (a-la debounce and then send Go again)
             in
-            ( { model | queue = queue_ }, Cmd.none )
+            ( { model | queue = queue_ }, cmd )
 
         _ ->
             ( model, Cmd.none )

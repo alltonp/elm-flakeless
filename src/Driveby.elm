@@ -5,7 +5,7 @@ module Driveby exposing (..)
 
 # Definition
 
-@docs Suite, Script, Request, Response
+@docs Suite, Script, Request, Response, Request
 
 
 # Common Helpers
@@ -40,8 +40,7 @@ type alias Script =
 {-| A Request sent to phantomjs
 -}
 type alias Request =
-    { context : Context
-    , step : Step
+    { js : String
     }
 
 

@@ -36,12 +36,15 @@ var flags = { numberOfBrowsers: pages.length };
 var app = Elm.DrivebyTest.embed(document.createElement('div'), flags);
 
 app.ports.requests.subscribe(function(request) {
-  var command = request.step.command
-  var name = command.name
-  var context = request.context
-  var page = pages[context.browserId]
+//  var command = request.step.command
+//  var name = command.name
+//  var context = request.context
+//  var page = pages[context.browserId]
 
   console.log(JSON.stringify(request) + "\n");
+
+  var page = pages[0]
+  page.evaluateJavaScript(request.js)
 
   respond(page, context, ["don't know how to process request: " + JSON.stringify(request) ], false);
 });
