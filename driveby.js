@@ -44,9 +44,10 @@ app.ports.requests.subscribe(function(request) {
   console.log(JSON.stringify(request) + "\n");
 
   var page = pages[0]
-  page.evaluateJavaScript(request.js)
+  var result = page.evaluateJavaScript(request.js)
 
-  respond(page, context, ["don't know how to process request: " + JSON.stringify(request) ], false);
+  var response = { js:request.js, successful:false }
+  app.ports.responses.send(response);
 });
 
 function respond(page, context, failures, result) {

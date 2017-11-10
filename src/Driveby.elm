@@ -41,6 +41,8 @@ type alias Script =
 -}
 type alias Request =
     { js : String
+
+    --    , context : Context
     }
 
 
@@ -51,8 +53,9 @@ type alias Request =
 {-| A Response sent from phantomjs
 -}
 type alias Response =
-    { context : Context
-    , failures : List String
+    { --    context : Context
+      --    , failures : List String
+      js : String
     , successful : Bool
     }
 
