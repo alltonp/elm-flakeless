@@ -2,10 +2,14 @@ module Driveby exposing (..)
 
 {-| This library is for defining scripts to test simple elm web applications using phantomjs
 
+
 # Definition
+
 @docs Suite, Script, Request, Response
 
+
 # Common Helpers
+
 @docs suite, script, serve, stub, goto, gotoLocal, click, enter, assert, textContains, textEquals
 
 -}
@@ -29,12 +33,20 @@ type alias Script =
     }
 
 
+
+--TIP: I think thus should be internal to the Runner - maybe because of ports?
+
+
 {-| A Request sent to phantomjs
 -}
 type alias Request =
     { context : Context
     , step : Step
     }
+
+
+
+--TIP: I think thus should be internal to the Runner - maybe because of ports?
 
 
 {-| A Response sent from phantomjs
@@ -129,7 +141,7 @@ textContains id expected =
         name =
             "textContains"
     in
-        Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected ]
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected ]
 
 
 {-| check element id text equals expected value
@@ -143,4 +155,4 @@ textEquals id expected =
         name =
             "textEquals"
     in
-        Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected ]
+    Condition (selector ++ " " ++ name ++ " '" ++ expected ++ "'") [ selector, name, expected ]
