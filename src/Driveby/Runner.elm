@@ -23,7 +23,29 @@ run suite requestsPort responsesPort =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( Model flags (Fifo.fromList [ ICommand "console.log('hi')", ICommand "console.log('low')" ]), go )
+    ( Model flags
+        (Fifo.fromList
+            [ --            ICommand "function(){ console.log('hi') }"
+              --            , ICommand "function(){ console.log('low') }"
+              --            , ICommand "function(){ urlToGoto='http://www.google.com'; }"
+              --            , ICommand "function(){ console.log(urlToGoto) }"
+              --              ICommand "open('http://www.google.com')"
+              --            ,
+              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
+
+            --            , ICommand "function(){ open(urlToGoto); }"
+            --            , ICommand "function(){ console.log(this); }"
+            --            , ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
+            --            , ICommand "this.open('http://www.google.com', function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + 'url']) } else { respond(page, null, []) }  });"
+            , ICommand "function(){ console.log(this.title); }"
+            , ICommand "function(){ console.log(this.url); }"
+            , ICommand "function(){ return this.title; }"
+            , ICommand "function(){ return this.url; }"
+            , ICommand "function(){ return 'hey'; }"
+            ]
+        )
+    , go
+    )
 
 
 go : Cmd Msg

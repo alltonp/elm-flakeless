@@ -6,7 +6,7 @@ var webpage = require('webpage')
 //TODO: or loading it from a file (and creating if doesnot exist) driveby.json
 var numberOfBrowsers = 1;
 var nextPort = 9000;
-var suppressPageErrors = true;
+var suppressPageErrors = false;
 var screenshotAllSteps = true;
 var screenshotFailures = true;
 
@@ -37,11 +37,35 @@ var app = Elm.DrivebyTest.embed(document.createElement('div'), flags);
 
 //TODO: create/destroy browser should probably be commands too (just be sure not in use)
 app.ports.requests.subscribe(function(request) {
-  console.log(JSON.stringify(request));
+  console.log("\n> " + JSON.stringify(request));
 
-  var page = pages[0]
-  var result = page.evaluateJavaScript(request.js)
+  var page = pages[0];
 
-  var response = { js:request.js, successful:false }
+//  var x = "function(){ page." + request.js + "; }"
+//  console.log("eval:" + x);
+//  var result = eval(x)
+
+// var x = 'function(){ this.open(\"http://www.google.com\", function(status) { console.log(status); }); }'
+ var result = page.evaluateJavaScript(request.js);
+ page.render(started + '/' + 999 + '/' + 1 + '.png')
+
+  console.log("< " + JSON.stringify(result) + "\n");
+
+  var response = { js:request.js, successful:true };
   app.ports.responses.send(response);
 });
+
+function respond(page, context, failures) {
+  console.log("responding ... ");
+
+  var y = Date.now()
+  var x = y.toString()
+//  console.log(x)
+  var response = { context:context, failures:failures, updated:x, successful:true, js:"js" }
+  //TODO: we could continue to serve locally on context.localPort, it might be interesting for debugging test failures ...
+  //TODO: just need a stayOpenOnFailure
+  var screenshot = page != null && (screenshotAllSteps || (screenshotFailures && failures.length > 0) )
+  if (screenshot) page.render(started + '/' + 999 + '/' + 1 + '.png')
+//  if (screenshot) console.log(page.plainText)
+  app.ports.responses.send(response);
+}
