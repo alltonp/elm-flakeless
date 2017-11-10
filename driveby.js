@@ -79,6 +79,8 @@ app.ports.requests.subscribe(function(request) {
   var context = request.context
   var page = pages[context.browserId]
 
+  console.log(JSON.stringify(request) + "\n");
+
   if (name == "click") { click(page, context, command.args[0]); }
   else if (name == "enter") { enter(page, context, command.args[0], command.args[1]); }
   else if (name == "goto") { goto(page, context, command.args[0]); }
