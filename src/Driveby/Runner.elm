@@ -23,7 +23,7 @@ run suite requestsPort responsesPort =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( Model flags (Fifo.fromList [ ICommand "console.log('hi')", ICommand "console.log('hi')" ]), go )
+    ( Model flags (Fifo.fromList [ ICommand "console.log('hi')", ICommand "console.log('low')" ]), go )
 
 
 go : Cmd Msg
@@ -56,8 +56,23 @@ update requestsPort msg model =
             in
             ( { model | queue = queue_ }, cmd )
 
-        _ ->
-            ( model, Cmd.none )
+        Process response ->
+            let
+                queue_ =
+                    if not response.successful then
+                        Fifo.insert (ICommand response.js) model.queue
+                    else
+                        model.queue
+
+                cmd =
+                    go
+            in
+            ( { model | queue = queue_ }, cmd )
+
+
+
+--        _ ->
+--            ( model, Cmd.none )
 
 
 view : Model -> Html Msg
