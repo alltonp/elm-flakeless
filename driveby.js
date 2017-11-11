@@ -46,7 +46,28 @@ app.ports.requests.subscribe(function(request) {
 //  var result = eval(x)
 
 // var x = 'function(){ this.open(\"http://www.google.com\", function(status) { console.log(status); }); }'
- var result = page.evaluateJavaScript(request.js);
+//  var result = page.evaluateJavaScript('"' + request.js + '"');
+
+ //TIP: so things work on document, console etc ... but not on page
+// var result = page.evaluateJavaScript(request.js);
+
+ //try raw eval
+// var result = eval("function(){ page.open('http://www.google.com', function(status) { console.log(status); }) }");
+// var result = eval("page.open('http://www.google.com', function(status) { console.log(status); })");
+
+       var gotoScript = "function goto(page, context, url) { \
+                           page.open(url, function(status) { \
+                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
+                             else { respond(page, context, []) } \
+                           }); \
+                         }"
+
+       eval(gotoScript);
+
+       eval('goto(page, null, "http://www.google.com");');
+
+
+
  page.render(started + '/' + 999 + '/' + 1 + '.png')
 
   console.log("< " + JSON.stringify(result) + "\n");

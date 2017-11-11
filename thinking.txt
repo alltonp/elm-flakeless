@@ -1,0 +1,38 @@
+maybe use headless chrome instead ...
+options - https://developers.google.com/web/updates/2017/04/headless-chrome
+api (json) - https://chromium.googlesource.com/chromium/src/+/master/third_party/WebKit/Source/core/inspector/browser_protocol.json
+api (docs) - https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigate
+
+crawling generally:
+good scrapping tips - https://blog.phantombuster.com/web-scraping-in-2017-headless-chrome-tips-tricks-4d6521d695e8
+3 rules to scrapting - https://blog.phantombuster.com/were-making-web-scraping-so-easy-that-you-re-going-to-love-it-d3efe3a3fad4
+nickjs - https://nickjs.org/
+pantombuster is a site for hosting robots, with human captha support!
+vinteresting - https://franciskim.co/dont-need-no-stinking-api-web-scraping-2016-beyond/
+
+
+https://franciskim.co/dont-need-no-stinking-api-web-scraping-2016-beyond/
+
+cdp and go - https://github.com/mafredri/cdp
+generate cddapi in go - https://github.com/mafredri/cdp/tree/master/cmd/cdpgen
+another go - https://github.com/knq/chromedp
+
+cdp and java - https://github.com/webfolderio/cdp4j
+
+cdp and chrome remote interface gist - https://gist.github.com/vignestion/e909b2f34bea7fbe0fbed30e223693e0
+
+chrome remote interface - https://github.com/cyrus-and/chrome-remote-interface
+
+ruby - https://github.com/cavalle/chrome_remote/
+
+lowest level - https://github.com/inca/chrome-connector and https://www.npmjs.com/package/chrome-connector
+
+puppetter (node) - https://github.com/GoogleChrome/puppeteer
+
+chromeless could work but npm/node mange - https://github.com/graphcool/chromeless
+example - https://github.com/graphcool/chromeless/blob/master/examples/extract-google-results.js
+
+nightmarejs (seems good api) - https://github.com/segmentio/nightmare
+or ghost - https://github.com/KevinGrandon/ghostjs
+navalia - https://github.com/joelgriffith/navalia
+chromy - https://github.com/OnetapInc/chromy

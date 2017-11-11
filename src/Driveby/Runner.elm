@@ -31,7 +31,7 @@ init flags =
               --            , ICommand "function(){ console.log(urlToGoto) }"
               --              ICommand "open('http://www.google.com')"
               --            ,
-              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
+              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }) }"
 
             --            , ICommand "function(){ open(urlToGoto); }"
             --            , ICommand "function(){ console.log(this); }"
@@ -42,6 +42,7 @@ init flags =
             , ICommand "function(){ return this.title; }"
             , ICommand "function(){ return this.url; }"
             , ICommand "function(){ return 'hey'; }"
+            , ICommand "function(){ return document.documentURI; }"
             ]
         )
     , go
