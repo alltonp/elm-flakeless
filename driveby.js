@@ -55,6 +55,13 @@ app.ports.requests.subscribe(function(request) {
 // var result = eval("function(){ page.open('http://www.google.com', function(status) { console.log(status); }) }");
 // var result = eval("page.open('http://www.google.com', function(status) { console.log(status); })");
 
+
+//                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
+//                             else { respond(page, context, []) } \
+
+       //this works ... could we bend all of these in on init?
+       //the \ are very important for some reason
+       //could code all the scripts up ...
        var gotoScript = "function goto(page, context, url) { \
                            page.open(url, function(status) { \
                              if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
@@ -64,9 +71,12 @@ app.ports.requests.subscribe(function(request) {
 
        eval(gotoScript);
 
+    console.log("\njs :[" + gotoScript + "]");
+    console.log("\nelm:[" + request.js + "]");
+
        eval('goto(page, null, "http://www.google.com");');
 
-
+// eval(request.js.replace(/\\n/g, '\\'));
 
  page.render(started + '/' + 999 + '/' + 1 + '.png')
 

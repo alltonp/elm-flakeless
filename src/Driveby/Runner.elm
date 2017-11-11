@@ -31,8 +31,16 @@ init flags =
               --            , ICommand "function(){ console.log(urlToGoto) }"
               --              ICommand "open('http://www.google.com')"
               --            ,
-              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }) }"
+              ICommand """function goto(page, context, url) {
+                                                   page.open(url, function(status) {
+                                                     if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
+                                                     else { respond(page, context, []) }
+                                                   });
+                                                 }"""
 
+            --              ICommand "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } });  }"
+            --            , ICommand "goto(page, null, 'http://www.google.com');"
+            --              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }) }"
             --            , ICommand "function(){ open(urlToGoto); }"
             --            , ICommand "function(){ console.log(this); }"
             --            , ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
