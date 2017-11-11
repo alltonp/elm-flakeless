@@ -31,12 +31,14 @@ init flags =
               --            , ICommand "function(){ console.log(urlToGoto) }"
               --              ICommand "open('http://www.google.com')"
               --            ,
-              ICommand """function goto(page, context, url) {
-                                                   page.open(url, function(status) {
-                                                     if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
-                                                     else { respond(page, context, []) }
-                                                   });
-                                                 }"""
+              --              ICommand (String.split "\n" """function goto(page, context, url) {
+              --                            page.open(url, function(status) {
+              --                                                     if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
+              --                                                     else { respond(page, context, []) }
+              --                                                   });
+              --                                                 }""" |> String.join "")
+              --            ,
+              ICommand """goto(page, null, "http://www.google.com");"""
 
             --              ICommand "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } });  }"
             --            , ICommand "goto(page, null, 'http://www.google.com');"
@@ -45,12 +47,12 @@ init flags =
             --            , ICommand "function(){ console.log(this); }"
             --            , ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
             --            , ICommand "this.open('http://www.google.com', function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + 'url']) } else { respond(page, null, []) }  });"
-            , ICommand "function(){ console.log(this.title); }"
-            , ICommand "function(){ console.log(this.url); }"
-            , ICommand "function(){ return this.title; }"
-            , ICommand "function(){ return this.url; }"
-            , ICommand "function(){ return 'hey'; }"
-            , ICommand "function(){ return document.documentURI; }"
+            --            , ICommand "function(){ console.log(this.title); }"
+            --            , ICommand "function(){ console.log(this.url); }"
+            --            , ICommand "function(){ return this.title; }"
+            --            , ICommand "function(){ return this.url; }"
+            --            , ICommand "function(){ return 'hey'; }"
+            --            , ICommand "function(){ return document.documentURI; }"
             ]
         )
     , go

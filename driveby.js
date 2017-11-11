@@ -70,13 +70,16 @@ app.ports.requests.subscribe(function(request) {
                          }"
 
        eval(gotoScript);
+//       eval('goto(page, null, "http://www.google.com");');
+
 
     console.log("\njs :[" + gotoScript + "]");
     console.log("\nelm:[" + request.js + "]");
 
-       eval('goto(page, null, "http://www.google.com");');
+    var result = "N/A"
 
-// eval(request.js.replace(/\\n/g, '\\'));
+
+ eval(request.js);
 
  page.render(started + '/' + 999 + '/' + 1 + '.png')
 
