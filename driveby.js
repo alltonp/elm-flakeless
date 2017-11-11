@@ -62,14 +62,15 @@ app.ports.requests.subscribe(function(request) {
        //this works ... could we bend all of these in on init?
        //the \ are very important for some reason
        //could code all the scripts up ...
-       var gotoScript = "function goto(page, context, url) { \
-                           page.open(url, function(status) { \
-                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
-                             else { respond(page, context, []) } \
-                           }); \
-                         }"
+//       var gotoScript = "function goto(page, context, url) { \
+//                           page.open(url, function(status) { \
+//                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
+//                             else { respond(page, context, []) } \
+//                           }); \
+//                         }"
+       var gotoScript = "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }"
 
-       eval(gotoScript);
+//       eval(gotoScript);
 //       eval('goto(page, null, "http://www.google.com");');
 
 
@@ -80,6 +81,8 @@ app.ports.requests.subscribe(function(request) {
 
 
  eval(request.js);
+
+ console.log("eval done!")
 
  page.render(started + '/' + 999 + '/' + 1 + '.png')
 

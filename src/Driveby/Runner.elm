@@ -37,9 +37,18 @@ init flags =
               --                                                     else { respond(page, context, []) }
               --                                                   });
               --                                                 }""" |> String.join "")
-              --            ,
-              ICommand """goto(page, null, "http://www.google.com");"""
+              ICommand """function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }; goto(page, null, "http://www.google.com");"""
 
+            --TODO: need to escape these too ... '
+            --              ICommand (String.split "\n" """function goto(page, context, url) {
+            --                                          page.open(url, function(status) {
+            --                                                                   if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
+            --                                                                   else { respond(page, context, []) }
+            --                                                                 });
+            --                                                               }""" |> List.map (\l -> "'" ++ l ++ "'") |> String.join " + ")
+            --            ,
+            --            , ICommand
+            --                """goto(page, null, "http://www.google.com");"""
             --              ICommand "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } });  }"
             --            , ICommand "goto(page, null, 'http://www.google.com');"
             --              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }) }"
@@ -50,7 +59,7 @@ init flags =
             --            , ICommand "function(){ console.log(this.title); }"
             --            , ICommand "function(){ console.log(this.url); }"
             --            , ICommand "function(){ return this.title; }"
-            --            , ICommand "function(){ return this.url; }"
+            --            , ICommand "console.log(page.url);"
             --            , ICommand "function(){ return 'hey'; }"
             --            , ICommand "function(){ return document.documentURI; }"
             ]
