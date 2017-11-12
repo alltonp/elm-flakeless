@@ -27,7 +27,7 @@ goto url =
         quotedUrl =
             "\"" ++ url ++ "\""
     in
-    """page.open(""" ++ quotedUrl ++ """, function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + """ ++ quotedUrl ++ """]) } else { respond(page, null, []) } });"""
+    """page.open(""" ++ quotedUrl ++ """, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + """ ++ quotedUrl ++ """]) } else { respond(page, context, []) } });"""
 
 
 init : Flags -> ( Model, Cmd Msg )

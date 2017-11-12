@@ -39,6 +39,7 @@ var app = Elm.DrivebyTest.embed(document.createElement('div'), flags);
 app.ports.requests.subscribe(function(request) {
   console.log("\n> " + JSON.stringify(request));
 
+  var context = null;
   var page = pages[0];
 
 //  var x = "function(){ page." + request.js + "; }"
