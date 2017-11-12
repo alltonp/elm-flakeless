@@ -30,6 +30,8 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 "use strict";
 
 //TODO: make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
+//TODO: rename app to flakeless etc
+//TODO: optional pass in a contains filter to run e.g "01"
 phantom.injectJs("tests.js") ? "... done injecting tests.js!" : "... failed injecting tests.js!";
 
 var flags = { numberOfBrowsers: pages.length };
@@ -42,55 +44,7 @@ app.ports.requests.subscribe(function(request) {
   var context = null;
   var page = pages[0];
 
-//  var x = "function(){ page." + request.js + "; }"
-//  console.log("eval:" + x);
-//  var result = eval(x)
-
-// var x = 'function(){ this.open(\"http://www.google.com\", function(status) { console.log(status); }); }'
-//  var result = page.evaluateJavaScript('"' + request.js + '"');
-
- //TIP: so things work on document, console etc ... but not on page
-// var result = page.evaluateJavaScript(request.js);
-
- //try raw eval
-// var result = eval("function(){ page.open('http://www.google.com', function(status) { console.log(status); }) }");
-// var result = eval("page.open('http://www.google.com', function(status) { console.log(status); })");
-
-
-//                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
-//                             else { respond(page, context, []) } \
-
-       //this works ... could we bend all of these in on init?
-       //the \ are very important for some reason
-       //could code all the scripts up ...
-//       var gotoScript = "function goto(page, context, url) { \
-//                           page.open(url, function(status) { \
-//                             if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } \
-//                             else { respond(page, context, []) } \
-//                           }); \
-//                         }"
-//       var gotoScript = "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }"
-
-//       eval(gotoScript);
-//       eval('goto(page, null, "http://www.google.com");');
-
-
-//    console.log("\njs :[" + gotoScript + "]");
-//    console.log("\nelm:[" + request.js + "]");
-
-    var result = "N/A"
-
-
- eval(request.js);
-
-// console.log("eval done!")
-
- page.render(started + '/' + 999 + '/' + 1 + '.png')
-
-//  console.log("< " + JSON.stringify(result) + "\n");
-
-//  var response = { js:request.js, successful:true };
-//  app.ports.responses.send(response);
+  eval(request.js);
 });
 
 function respond(page, context, failures) {

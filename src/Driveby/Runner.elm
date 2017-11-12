@@ -21,6 +21,10 @@ run suite requestsPort responsesPort =
         }
 
 
+
+--TODO: move into PhantomJsDialect
+
+
 goto : String -> String
 goto url =
     let
@@ -34,47 +38,8 @@ init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( Model flags
         (Fifo.fromList
-            [ --            ICommand "function(){ console.log('hi') }"
-              --            , ICommand "function(){ console.log('low') }"
-              --            , ICommand "function(){ urlToGoto='http://www.google.com'; }"
-              --            , ICommand "function(){ console.log(urlToGoto) }"
-              --              ICommand "open('http://www.google.com')"
-              --            ,
-              --              ICommand (String.split "\n" """function goto(page, context, url) {
-              --                            page.open(url, function(status) {
-              --                                                     if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
-              --                                                     else { respond(page, context, []) }
-              --                                                   });
-              --                                                 }""" |> String.join "")
-              --TIP: this one fully works ...
-              --              ICommand """function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }; goto(page, null, "http://www.google.com");"""
-              --TIP: this one works inline, without the function, whoop!
-              ICommand (goto "http://www.google.com")
+            [ ICommand (goto "http://www.google.com")
             , ICommand (goto "http://www.bbc.co.uk/news")
-
-            --TODO: need to escape these too ... '
-            --              ICommand (String.split "\n" """function goto(page, context, url) {
-            --                                          page.open(url, function(status) {
-            --                                                                   if (status !== 'success') { respond(page, context, [status + ' for ' + url]) }
-            --                                                                   else { respond(page, context, []) }
-            --                                                                 });
-            --                                                               }""" |> List.map (\l -> "'" ++ l ++ "'") |> String.join " + ")
-            --            ,
-            --            , ICommand
-            --                """goto(page, null, "http://www.google.com");"""
-            --              ICommand "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } });  }"
-            --            , ICommand "goto(page, null, 'http://www.google.com');"
-            --              ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }) }"
-            --            , ICommand "function(){ open(urlToGoto); }"
-            --            , ICommand "function(){ console.log(this); }"
-            --            , ICommand "function(){ this.open('http://www.google.com', function(status) { console.log(status); }); }"
-            --            , ICommand "this.open('http://www.google.com', function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + 'url']) } else { respond(page, null, []) }  });"
-            --            , ICommand "function(){ console.log(this.title); }"
-            --            , ICommand "function(){ console.log(this.url); }"
-            --            , ICommand "function(){ return this.title; }"
-            --            , ICommand "console.log(page.url);"
-            --            , ICommand "function(){ return 'hey'; }"
-            --            , ICommand "function(){ return document.documentURI; }"
             ]
         )
     , go
