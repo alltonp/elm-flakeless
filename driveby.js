@@ -32,6 +32,7 @@ for (var i = 0; i < numberOfBrowsers; i+=1) {
 //TODO: make this an argv ... maybe support multiple file inputs .... run if successful ... good for autotesting
 //TODO: rename app to flakeless etc
 //TODO: optional pass in a contains filter to run e.g "01"
+//TODO: host a server to show the ui ...
 phantom.injectJs("tests.js") ? "... done injecting tests.js!" : "... failed injecting tests.js!";
 
 var flags = { numberOfBrowsers: pages.length };
@@ -47,6 +48,7 @@ app.ports.requests.subscribe(function(request) {
   eval(request.js);
 });
 
+//TODO: might need a retry flag to support fail fast actions like goto, create/destroy etc, probing vs non
 function respond(page, context, failures) {
   console.log("responding ... ");
 
