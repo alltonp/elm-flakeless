@@ -54,9 +54,10 @@ type alias Request =
 -}
 type alias Response =
     { --    context : Context
-      --    , failures : List String
-      js : String
-    , successful : Bool
+      failures : List String
+    , js : String
+
+    --    , successful : Bool
     }
 
 

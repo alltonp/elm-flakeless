@@ -68,28 +68,28 @@ app.ports.requests.subscribe(function(request) {
 //                             else { respond(page, context, []) } \
 //                           }); \
 //                         }"
-       var gotoScript = "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }"
+//       var gotoScript = "function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }"
 
 //       eval(gotoScript);
 //       eval('goto(page, null, "http://www.google.com");');
 
 
-    console.log("\njs :[" + gotoScript + "]");
-    console.log("\nelm:[" + request.js + "]");
+//    console.log("\njs :[" + gotoScript + "]");
+//    console.log("\nelm:[" + request.js + "]");
 
     var result = "N/A"
 
 
  eval(request.js);
 
- console.log("eval done!")
+// console.log("eval done!")
 
  page.render(started + '/' + 999 + '/' + 1 + '.png')
 
-  console.log("< " + JSON.stringify(result) + "\n");
+//  console.log("< " + JSON.stringify(result) + "\n");
 
-  var response = { js:request.js, successful:true };
-  app.ports.responses.send(response);
+//  var response = { js:request.js, successful:true };
+//  app.ports.responses.send(response);
 });
 
 function respond(page, context, failures) {

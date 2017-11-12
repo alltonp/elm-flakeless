@@ -41,6 +41,7 @@ init flags =
               --              ICommand """function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }; goto(page, null, "http://www.google.com");"""
               --TIP: this one works inline, without the function, whoop!
               ICommand """page.open("http://www.google.com", function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + "http://www.google.com"]) } else { respond(page, null, []) } });"""
+            , ICommand """page.open("http://www.bbc.co.uk/news", function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + "http://www.bbc.co.uk/news"]) } else { respond(page, null, []) } });"""
 
             --TODO: need to escape these too ... '
             --              ICommand (String.split "\n" """function goto(page, context, url) {
@@ -103,8 +104,11 @@ update requestsPort msg model =
 
         Process response ->
             let
+                successful =
+                    List.isEmpty response.failures
+
                 queue_ =
-                    if not response.successful then
+                    if not successful then
                         Fifo.insert (ICommand response.js) model.queue
                     else
                         model.queue
