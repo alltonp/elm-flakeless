@@ -21,6 +21,15 @@ run suite requestsPort responsesPort =
         }
 
 
+goto : String -> String
+goto url =
+    let
+        quotedUrl =
+            "\"" ++ url ++ "\""
+    in
+    """page.open(""" ++ quotedUrl ++ """, function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + """ ++ quotedUrl ++ """]) } else { respond(page, null, []) } });"""
+
+
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( Model flags
@@ -40,8 +49,8 @@ init flags =
               --TIP: this one fully works ...
               --              ICommand """function goto(page, context, url) { page.open(url, function(status) { if (status !== 'success') { respond(page, context, [status + ' for ' + url]) } else { respond(page, context, []) } }); }; goto(page, null, "http://www.google.com");"""
               --TIP: this one works inline, without the function, whoop!
-              ICommand """page.open("http://www.google.com", function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + "http://www.google.com"]) } else { respond(page, null, []) } });"""
-            , ICommand """page.open("http://www.bbc.co.uk/news", function(status) { if (status !== 'success') { respond(page, null, [status + ' for ' + "http://www.bbc.co.uk/news"]) } else { respond(page, null, []) } });"""
+              ICommand (goto "http://www.google.com")
+            , ICommand (goto "http://www.bbc.co.uk/news")
 
             --TODO: need to escape these too ... '
             --              ICommand (String.split "\n" """function goto(page, context, url) {
